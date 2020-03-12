@@ -13,6 +13,8 @@ const CALENDAR_ID = properties.getProperty('CALENDAR_ID');
 const SHEET_NAME = properties.getProperty('SHEET_NAME');
 // 標準の場所
 const DEFAULT_LOCATION = properties.getProperty('DEFAULT_LOCATION');
+// 標準のタイトル
+const DEFAULT_TITLE = properties.getProperty('DEFAULT_TITLE');
 // 通知する時間
 const POPUP_MINUTES = properties.getProperty('POPUP_MINUTES');
 
@@ -36,13 +38,15 @@ export function addEventsToGoogleCalendar (): void {
 
     let columnNumber = 2;
     const id = sheet.getRange(rowNumber, columnNumber).getValue();
-    const title = sheet.getRange(rowNumber, ++columnNumber).getValue();
+    const useDefaultTitle = sheet.getRange(rowNumber, columnNumber).getValue() as boolean;
+    const customTitle = sheet.getRange(rowNumber, ++columnNumber).getValue();
     const eventStartDateTime = sheet.getRange(rowNumber, ++columnNumber).getValue();
     const eventEndDateTime = sheet.getRange(rowNumber, ++columnNumber).getValue();
     const useDefaultLocation = sheet.getRange(rowNumber, ++columnNumber).getValue() as boolean;
     const customLocation = sheet.getRange(rowNumber, ++columnNumber).getValue();
     const description = sheet.getRange(rowNumber, ++columnNumber).getValue();
 
+    const title = useDefaultTitle ? DEFAULT_TITLE : customTitle;
     const location = useDefaultLocation ? DEFAULT_LOCATION : customLocation;
     const options: CalendarOptions = { description, location };
 
