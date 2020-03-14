@@ -38,7 +38,7 @@ export function addEventsToGoogleCalendar (): void {
 
     let columnNumber = 2;
     const id = sheet.getRange(rowNumber, columnNumber).getValue();
-    const useDefaultTitle = sheet.getRange(rowNumber, columnNumber).getValue() as boolean;
+    const useDefaultTitle = sheet.getRange(rowNumber, ++columnNumber).getValue() as boolean;
     const customTitle = sheet.getRange(rowNumber, ++columnNumber).getValue();
     const eventStartDateTime = sheet.getRange(rowNumber, ++columnNumber).getValue();
     const eventEndDateTime = sheet.getRange(rowNumber, ++columnNumber).getValue();
@@ -72,8 +72,9 @@ export function addEventsToGoogleCalendar (): void {
  */
 export function createNewCalendarEvent (title: string, startDateTime: Date, endDateTime: Date, options: CalendarOptions): CalendarEvent {
   const calendar = CalendarApp.getCalendarById(CALENDAR_ID);
+  const event = calendar.createEvent(title, startDateTime, endDateTime);
 
-  return calendar.createEvent(title, startDateTime, endDateTime, options);
+  return event.setDescription(options.description).setLocation(options.location);
 }
 
 /**
