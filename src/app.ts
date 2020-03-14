@@ -44,10 +44,15 @@ export function addEventsToGoogleCalendar (): void {
     const eventEndDateTime = sheet.getRange(rowNumber, ++columnNumber).getValue();
     const useDefaultLocation = sheet.getRange(rowNumber, ++columnNumber).getValue() as boolean;
     const customLocation = sheet.getRange(rowNumber, ++columnNumber).getValue();
-    const description = sheet.getRange(rowNumber, ++columnNumber).getValue();
+    const baseDescription = sheet.getRange(rowNumber, ++columnNumber).getValue();
 
     const title = useDefaultTitle ? DEFAULT_TITLE : customTitle;
     const location = useDefaultLocation ? DEFAULT_LOCATION : customLocation;
+    const description = [
+      baseDescription,
+      `default_title : ${useDefaultTitle}`,
+      `default_location : ${useDefaultLocation}`,
+    ].join('\n').trim();
     const options: CalendarOptions = { description, location };
 
     const calendarEvent = id === ''
