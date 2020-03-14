@@ -12,6 +12,13 @@
       "before 10am on the 15th day of the month"
     ]
   },
+  "pin": {
+    "enabled": true,
+    "schedule": [
+      "every weekday",
+      "every weekend"
+    ]
+  },
   "patch": {
     "automerge": true
   }
