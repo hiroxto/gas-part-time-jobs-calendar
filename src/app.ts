@@ -59,6 +59,7 @@ export function addEventsToGoogleCalendar (): void {
       ? createNewCalendarEvent(title, eventStartDateTime, eventEndDateTime, options)
       : updateCalendarEvent(id, title, eventStartDateTime, eventEndDateTime, options);
 
+    setCalendarOptions(calendarEvent, options);
     addPopupReminders(calendarEvent);
 
     sheet.getRange(rowNumber, 1).setValue(ADDED_STATUS_VALUE);
@@ -103,6 +104,16 @@ export function updateCalendarEvent (id: string, title: string, startDateTime: D
     .setLocation(options.location);
 
   return event;
+}
+
+/**
+ * イベントにオプションをセットする
+ *
+ * @param event セットする対象のイベント
+ * @param options イベントのオプション
+ */
+export function setCalendarOptions (event: CalendarEvent, options: CalendarOptions): CalendarEvent {
+  return event.setDescription(options.description).setLocation(options.location);
 }
 
 /**
