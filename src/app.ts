@@ -77,6 +77,7 @@ export function addEventsToGoogleCalendar (): void {
  */
 export function createNewCalendarEvent (title: string, startDateTime: Date, endDateTime: Date): CalendarEvent {
   const calendar = CalendarApp.getCalendarById(CALENDAR_ID);
+
   return calendar.createEvent(title, startDateTime, endDateTime);
 }
 
