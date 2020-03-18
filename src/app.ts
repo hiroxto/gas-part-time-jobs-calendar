@@ -18,7 +18,7 @@ const DEFAULT_TITLE = properties.getProperty('DEFAULT_TITLE');
 // 通知する時間
 const POPUP_MINUTES = properties.getProperty('POPUP_MINUTES');
 
-interface CalendarOptions {
+interface CalendarEventOptions {
   description: string;
   location: string;
 }
@@ -53,7 +53,7 @@ export function addEventsToGoogleCalendar (): void {
       `default_title : ${useDefaultTitle}`,
       `default_location : ${useDefaultLocation}`,
     ].join('\n').trim();
-    const options: CalendarOptions = { description, location };
+    const options: CalendarEventOptions = { description, location };
 
     const calendarEvent = id === ''
       ? createNewCalendarEvent(title, eventStartDateTime, eventEndDateTime)
@@ -104,7 +104,7 @@ export function updateCalendarEvent (id: string, title: string, startDateTime: D
  * @param options イベントのオプション
  * @returns オプションを設定したイベント
  */
-export function setCalendarOptions (event: CalendarEvent, options: CalendarOptions): CalendarEvent {
+export function setCalendarOptions (event: CalendarEvent, options: CalendarEventOptions): CalendarEvent {
   return event.setDescription(options.description).setLocation(options.location);
 }
 
