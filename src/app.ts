@@ -57,7 +57,7 @@ export function addEventsToGoogleCalendar (): void {
 
     const calendarEvent = id === ''
       ? createNewCalendarEvent(title, eventStartDateTime, eventEndDateTime)
-      : updateCalendarEvent(id, title, eventStartDateTime, eventEndDateTime, options);
+      : updateCalendarEvent(id, title, eventStartDateTime, eventEndDateTime);
 
     setCalendarOptions(calendarEvent, options);
     addPopupReminders(calendarEvent);
@@ -87,20 +87,13 @@ export function createNewCalendarEvent (title: string, startDateTime: Date, endD
  * @param title イベントのタイトル
  * @param startDateTime イベントの開始日時
  * @param endDateTime イベントの終了日時
- * @param options イベントのオプション
  * @returns 更新されたイベント
  */
-export function updateCalendarEvent (id: string, title: string, startDateTime: Date, endDateTime: Date, options: CalendarOptions): CalendarEvent {
+export function updateCalendarEvent (id: string, title: string, startDateTime: Date, endDateTime: Date): CalendarEvent {
   const calendar = CalendarApp.getCalendarById(CALENDAR_ID);
   const event = calendar.getEventById(id);
 
-  event
-    .setTitle(title)
-    .setTime(startDateTime, endDateTime)
-    .setDescription(options.description)
-    .setLocation(options.location);
-
-  return event;
+  return event.setTitle(title).setTime(startDateTime, endDateTime);
 }
 
 /**
