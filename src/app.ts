@@ -56,7 +56,7 @@ export function addEventsToGoogleCalendar (): void {
     const options: CalendarOptions = { description, location };
 
     const calendarEvent = id === ''
-      ? createNewCalendarEvent(title, eventStartDateTime, eventEndDateTime, options)
+      ? createNewCalendarEvent(title, eventStartDateTime, eventEndDateTime)
       : updateCalendarEvent(id, title, eventStartDateTime, eventEndDateTime, options);
 
     setCalendarOptions(calendarEvent, options);
@@ -73,14 +73,11 @@ export function addEventsToGoogleCalendar (): void {
  * @param title イベントのタイトル
  * @param startDateTime イベントの開始日時
  * @param endDateTime イベントの終了日時
- * @param options イベントのオプション
  * @returns 作成されたイベント
  */
-export function createNewCalendarEvent (title: string, startDateTime: Date, endDateTime: Date, options: CalendarOptions): CalendarEvent {
+export function createNewCalendarEvent (title: string, startDateTime: Date, endDateTime: Date): CalendarEvent {
   const calendar = CalendarApp.getCalendarById(CALENDAR_ID);
-  const event = calendar.createEvent(title, startDateTime, endDateTime);
-
-  return event.setDescription(options.description).setLocation(options.location);
+  return calendar.createEvent(title, startDateTime, endDateTime);
 }
 
 /**
