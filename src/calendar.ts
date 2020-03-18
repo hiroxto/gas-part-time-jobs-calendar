@@ -10,7 +10,7 @@ const ADDED_STATUS_VALUE = properties.getProperty('ADDED_STATUS_VALUE');
 // 登録するカレンダーの ID
 const CALENDAR_ID = properties.getProperty('CALENDAR_ID');
 // データの入ったシート名
-const SHEET_NAME = properties.getProperty('SHEET_NAME');
+const CALENDAR_SHEET_NAME = properties.getProperty('CALENDAR_SHEET_NAME');
 // 標準の場所
 const DEFAULT_LOCATION = properties.getProperty('DEFAULT_LOCATION');
 // 標準のタイトル
@@ -27,7 +27,7 @@ interface CalendarEventOptions {
  * シートのデータをカレンダーに登録する
  */
 export function addEventsToGoogleCalendar (): void {
-  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(SHEET_NAME);
+  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(CALENDAR_SHEET_NAME);
 
   for (let rowNumber = 2; rowNumber <= sheet.getLastRow(); rowNumber++) {
     const status = sheet.getRange(rowNumber, 1).getValue();
