@@ -18,7 +18,7 @@ const DEFAULT_TITLE = properties.getProperty('DEFAULT_TITLE');
 // 通知する時間
 const POPUP_MINUTES = properties.getProperty('POPUP_MINUTES');
 
-interface CalendarOptions {
+interface CalendarEventOptions {
   description: string;
   location: string;
 }
@@ -53,12 +53,13 @@ export function addEventsToGoogleCalendar (): void {
       `default_title : ${useDefaultTitle}`,
       `default_location : ${useDefaultLocation}`,
     ].join('\n').trim();
-    const options: CalendarOptions = { description, location };
+    const options: CalendarEventOptions = { description, location };
 
     const calendarEvent = id === ''
-      ? createNewCalendarEvent(title, eventStartDateTime, eventEndDateTime, options)
-      : updateCalendarEvent(id, title, eventStartDateTime, eventEndDateTime, options);
+      ? createNewCalendarEvent(title, eventStartDateTime, eventEndDateTime)
+      : updateCalendarEvent(id, title, eventStartDateTime, eventEndDateTime);
 
+    setCalendarOptions(calendarEvent, options);
     addPopupReminders(calendarEvent);
 
     sheet.getRange(rowNumber, 1).setValue(ADDED_STATUS_VALUE);
@@ -72,14 +73,12 @@ export function addEventsToGoogleCalendar (): void {
  * @param title イベントのタイトル
  * @param startDateTime イベントの開始日時
  * @param endDateTime イベントの終了日時
- * @param options イベントのオプション
  * @returns 作成されたイベント
  */
-export function createNewCalendarEvent (title: string, startDateTime: Date, endDateTime: Date, options: CalendarOptions): CalendarEvent {
+export function createNewCalendarEvent (title: string, startDateTime: Date, endDateTime: Date): CalendarEvent {
   const calendar = CalendarApp.getCalendarById(CALENDAR_ID);
-  const event = calendar.createEvent(title, startDateTime, endDateTime);
 
-  return event.setDescription(options.description).setLocation(options.location);
+  return calendar.createEvent(title, startDateTime, endDateTime);
 }
 
 /**
@@ -89,20 +88,24 @@ export function createNewCalendarEvent (title: string, startDateTime: Date, endD
  * @param title イベントのタイトル
  * @param startDateTime イベントの開始日時
  * @param endDateTime イベントの終了日時
- * @param options イベントのオプション
  * @returns 更新されたイベント
  */
-export function updateCalendarEvent (id: string, title: string, startDateTime: Date, endDateTime: Date, options: CalendarOptions): CalendarEvent {
+export function updateCalendarEvent (id: string, title: string, startDateTime: Date, endDateTime: Date): CalendarEvent {
   const calendar = CalendarApp.getCalendarById(CALENDAR_ID);
   const event = calendar.getEventById(id);
 
-  event
-    .setTitle(title)
-    .setTime(startDateTime, endDateTime)
-    .setDescription(options.description)
-    .setLocation(options.location);
+  return event.setTitle(title).setTime(startDateTime, endDateTime);
+}
 
-  return event;
+/**
+ * イベントにオプションをセットする
+ *
+ * @param event セットする対象のイベント
+ * @param options イベントのオプション
+ * @returns オプションを設定したイベント
+ */
+export function setCalendarOptions (event: CalendarEvent, options: CalendarEventOptions): CalendarEvent {
+  return event.setDescription(options.description).setLocation(options.location);
 }
 
 /**
