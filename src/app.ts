@@ -101,6 +101,7 @@ export function updateCalendarEvent (id: string, title: string, startDateTime: D
  *
  * @param event セットする対象のイベント
  * @param options イベントのオプション
+ * @returns オプションを設定したイベント
  */
 export function setCalendarOptions (event: CalendarEvent, options: CalendarOptions): CalendarEvent {
   return event.setDescription(options.description).setLocation(options.location);
