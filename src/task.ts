@@ -11,6 +11,7 @@ const PARENT_TASK_TITLE = PropertiesService.getScriptProperties().getProperty('P
 interface TaskSetting {
   rawDate: Date;
   date: string;
+  lastRow: number;
 }
 
 interface TaskOptions {
@@ -23,8 +24,8 @@ interface TaskOptions {
  * シートに登録されたタスクを, カレンダーのタスクに登録する
  */
 export function addTasks (): void {
-  const taskTitles = getTaskTitles_();
   const setting = getSetting_();
+  const taskTitles = getTaskTitles_(setting.lastRow);
   const parentTask = createParentTask_(setting);
 
   taskTitles.reverse().forEach((taskTitle) => {
@@ -35,14 +36,15 @@ export function addTasks (): void {
 /**
  * 登録するタスクのタイトルのリストを取得する
  *
+ * @param lastRow 最終行
  * @returns タスクのタイトルのリスト
  * @private
  */
-export function getTaskTitles_ (): string[] {
+export function getTaskTitles_ (lastRow: number): string[] {
   const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(TASK_SHEET_NAME);
   const taskTitles = [];
 
-  for (let rowNumber = 2; rowNumber <= sheet.getLastRow(); rowNumber++) {
+  for (let rowNumber = 2; rowNumber <= lastRow; rowNumber++) {
     const isEnable = sheet.getRange(rowNumber, 1).getValue() as boolean;
     const taskTitle = sheet.getRange(rowNumber, 2).getValue();
     if (isEnable) {
@@ -64,10 +66,12 @@ export function getSetting_ (): TaskSetting {
   const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(TASK_SHEET_NAME);
   const rawDate = sheet.getRange(2, 5).getValue();
   const date = Utilities.formatDate(rawDate, 'Asia/Tokyo', "yyyy-MM-dd'T'HH:mm:ss'Z'");
+  const lastRow = sheet.getRange(3, 5).getValue();
 
   return {
     rawDate,
     date,
+    lastRow,
   };
 }
 
