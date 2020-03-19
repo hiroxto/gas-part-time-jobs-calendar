@@ -56,11 +56,11 @@ export function addEventsToGoogleCalendar (): void {
     const options: CalendarEventOptions = { description, location };
 
     const calendarEvent = id === ''
-      ? createNewCalendarEvent(title, eventStartDateTime, eventEndDateTime)
-      : updateCalendarEvent(id, title, eventStartDateTime, eventEndDateTime);
+      ? createNewCalendarEvent_(title, eventStartDateTime, eventEndDateTime)
+      : updateCalendarEvent_(id, title, eventStartDateTime, eventEndDateTime);
 
-    setCalendarOptions(calendarEvent, options);
-    addPopupReminders(calendarEvent);
+    setCalendarOptions_(calendarEvent, options);
+    addPopupReminders_(calendarEvent);
 
     sheet.getRange(rowNumber, 1).setValue(ADDED_STATUS_VALUE);
     sheet.getRange(rowNumber, 2).setValue(calendarEvent.getId());
@@ -74,8 +74,9 @@ export function addEventsToGoogleCalendar (): void {
  * @param startDateTime イベントの開始日時
  * @param endDateTime イベントの終了日時
  * @returns 作成されたイベント
+ * @private
  */
-export function createNewCalendarEvent (title: string, startDateTime: Date, endDateTime: Date): CalendarEvent {
+export function createNewCalendarEvent_ (title: string, startDateTime: Date, endDateTime: Date): CalendarEvent {
   const calendar = CalendarApp.getCalendarById(CALENDAR_ID);
 
   return calendar.createEvent(title, startDateTime, endDateTime);
@@ -89,8 +90,9 @@ export function createNewCalendarEvent (title: string, startDateTime: Date, endD
  * @param startDateTime イベントの開始日時
  * @param endDateTime イベントの終了日時
  * @returns 更新されたイベント
+ * @private
  */
-export function updateCalendarEvent (id: string, title: string, startDateTime: Date, endDateTime: Date): CalendarEvent {
+export function updateCalendarEvent_ (id: string, title: string, startDateTime: Date, endDateTime: Date): CalendarEvent {
   const calendar = CalendarApp.getCalendarById(CALENDAR_ID);
   const event = calendar.getEventById(id);
 
@@ -103,8 +105,9 @@ export function updateCalendarEvent (id: string, title: string, startDateTime: D
  * @param event セットする対象のイベント
  * @param options イベントのオプション
  * @returns オプションを設定したイベント
+ * @private
  */
-export function setCalendarOptions (event: CalendarEvent, options: CalendarEventOptions): CalendarEvent {
+export function setCalendarOptions_ (event: CalendarEvent, options: CalendarEventOptions): CalendarEvent {
   return event.setDescription(options.description).setLocation(options.location);
 }
 
@@ -114,8 +117,9 @@ export function setCalendarOptions (event: CalendarEvent, options: CalendarEvent
  *
  * @param event 通知を設定するイベント
  * @returns 通知を設定したイベント
+ * @private
  */
-export function addPopupReminders (event: CalendarEvent): CalendarEvent {
+export function addPopupReminders_ (event: CalendarEvent): CalendarEvent {
   const popupAts: number[] = POPUP_MINUTES.split(',').map(s => Number(s.trim()));
 
   event.removeAllReminders();
