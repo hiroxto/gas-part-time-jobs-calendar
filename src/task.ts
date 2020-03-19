@@ -25,10 +25,10 @@ interface TaskOptions {
 export function addTasks (): void {
   const taskTitles = getTaskTitles_();
   const setting = getSetting_();
-  const baseTask = createParentTask_(setting);
+  const parentTask = createParentTask_(setting);
 
   taskTitles.reverse().forEach((taskTitle) => {
-    createChidedTask_(taskTitle, baseTask);
+    createChidedTask_(taskTitle, parentTask);
   });
 }
 
@@ -110,13 +110,13 @@ export function createParentTask_ (setting: TaskSetting): Task {
  * サブタスクを設定する
  *
  * @param taskTitle タスクのタイトル
- * @param baseTask 親タスク
+ * @param parentTask 親タスク
  * @return 作成されたタスク
  * @private
  */
-export function createChidedTask_ (taskTitle: string, baseTask: Task): Task {
+export function createChidedTask_ (taskTitle: string, parentTask: Task): Task {
   const options = {
-    parent: baseTask.id,
+    parent: parentTask.id,
   };
 
   return insertNewTask_(taskTitle, options);
