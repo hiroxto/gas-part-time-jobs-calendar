@@ -19,6 +19,9 @@ interface TaskOptions {
   position?: string;
 }
 
+/**
+ * シートに登録されたタスクを, カレンダーのタスクに登録する
+ */
 export function addTasks (): void {
   const taskTitles = getTaskTitles_();
   const setting = getSetting_();
@@ -29,6 +32,12 @@ export function addTasks (): void {
   });
 }
 
+/**
+ * 登録するタスクのタイトルのリストを取得する
+ *
+ * @returns タスクのタイトルのリスト
+ * @private
+ */
 export function getTaskTitles_ (): string[] {
   const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(TASK_SHEET_NAME);
   const taskTitles = [];
@@ -44,6 +53,13 @@ export function getTaskTitles_ (): string[] {
   return taskTitles;
 }
 
+/**
+ * タスク登録の設定を取得する
+ * E2 に登録対象の日時が登録されている.
+ *
+ * @returns タスクの設定
+ * @private
+ */
 export function getSetting_ (): TaskSetting {
   const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(TASK_SHEET_NAME);
   const rawDate = sheet.getRange(2, 5).getValue();
@@ -55,6 +71,14 @@ export function getSetting_ (): TaskSetting {
   };
 }
 
+/**
+ * 新しいタスクを追加する
+ *
+ * @param taskTitle タスクのタイトル
+ * @param options タスクのオプション
+ * @returns 作成されたタスク
+ * @private
+ */
 export function insertNewTask_ (taskTitle: string, options: TaskOptions): Task {
   const newTask = Tasks.newTask();
   newTask.title = taskTitle;
@@ -65,6 +89,13 @@ export function insertNewTask_ (taskTitle: string, options: TaskOptions): Task {
   return Tasks.Tasks.insert(newTask, TASK_LIST_ID, options);
 }
 
+/**
+ * 親のタスクを作成する
+ *
+ * @param setting タスクの設定
+ * @returns 作成されたタスク
+ * @private
+ */
 export function createParentTask_ (setting: TaskSetting): Task {
   const date = Utilities.formatDate(setting.rawDate, 'Asia/Tokyo', 'yyyy/MM/dd');
   const title = `${date} ${PARENT_TASK_TITLE}`;
@@ -75,6 +106,14 @@ export function createParentTask_ (setting: TaskSetting): Task {
   return insertNewTask_(title, options);
 }
 
+/**
+ * サブタスクを設定する
+ *
+ * @param taskTitle タスクのタイトル
+ * @param baseTask 親タスク
+ * @return 作成されたタスク
+ * @private
+ */
 export function createChidedTask_ (taskTitle: string, baseTask: Task): Task {
   const options = {
     parent: baseTask.id,
