@@ -1,22 +1,20 @@
 // eslint-disable-next-line no-undef
 import CalendarEvent = GoogleAppsScript.Calendar.CalendarEvent;
 
-const properties = PropertiesService.getScriptProperties();
-
 // 実行する status の値
-const EXECUTE_STATUS_VALUE = properties.getProperty('EXECUTE_STATUS_VALUE');
+const EXECUTE_STATUS_VALUE = PropertiesService.getScriptProperties().getProperty('EXECUTE_STATUS_VALUE');
 // 実行完了後にセットする status の値
-const ADDED_STATUS_VALUE = properties.getProperty('ADDED_STATUS_VALUE');
+const ADDED_STATUS_VALUE = PropertiesService.getScriptProperties().getProperty('ADDED_STATUS_VALUE');
 // 登録するカレンダーの ID
-const CALENDAR_ID = properties.getProperty('CALENDAR_ID');
+const CALENDAR_ID = PropertiesService.getScriptProperties().getProperty('CALENDAR_ID');
 // データの入ったシート名
-const CALENDAR_SHEET_NAME = properties.getProperty('CALENDAR_SHEET_NAME');
+const CALENDAR_SHEET_NAME = PropertiesService.getScriptProperties().getProperty('CALENDAR_SHEET_NAME');
 // 標準の場所
-const DEFAULT_LOCATION = properties.getProperty('DEFAULT_LOCATION');
+const DEFAULT_LOCATION = PropertiesService.getScriptProperties().getProperty('DEFAULT_LOCATION');
 // 標準のタイトル
-const DEFAULT_TITLE = properties.getProperty('DEFAULT_TITLE');
+const DEFAULT_TITLE = PropertiesService.getScriptProperties().getProperty('DEFAULT_TITLE');
 // 通知する時間
-const POPUP_MINUTES = properties.getProperty('POPUP_MINUTES');
+const POPUP_MINUTES = PropertiesService.getScriptProperties().getProperty('POPUP_MINUTES');
 
 interface CalendarEventOptions {
   description: string;
