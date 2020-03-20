@@ -46,8 +46,8 @@ export function getTaskTitles_ (lastRow: number): string[] {
 
   for (let rowNumber = 2; rowNumber <= lastRow; rowNumber++) {
     const isEnable = sheet.getRange(rowNumber, 1).getValue() as boolean;
-    const taskTitle = sheet.getRange(rowNumber, 2).getValue();
     if (isEnable) {
+      const taskTitle = sheet.getRange(rowNumber, 2).getValue();
       taskTitles.push(taskTitle);
     }
   }
