@@ -103,7 +103,7 @@ export function insertNewTask_ (taskTitle: string, options: TaskOptions): Task {
 export function createParentTask_ (setting: TaskSetting): Task {
   const titleDate = Utilities.formatDate(setting.rawDate, 'Asia/Tokyo', 'yyyy/MM/dd');
   const title = `${titleDate} ${PARENT_TASK_TITLE}`;
-  const options = {
+  const options: TaskOptions = {
     due: setting.date,
   };
 
@@ -119,7 +119,7 @@ export function createParentTask_ (setting: TaskSetting): Task {
  * @private
  */
 export function createChidedTask_ (taskTitle: string, parentTask: Task): Task {
-  const options = {
+  const options: TaskOptions = {
     parent: parentTask.id,
   };
 
