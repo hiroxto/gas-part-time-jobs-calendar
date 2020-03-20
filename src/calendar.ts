@@ -1,3 +1,5 @@
+import { CalendarEventOptions } from '~/types';
+
 // eslint-disable-next-line no-undef
 import CalendarEvent = GoogleAppsScript.Calendar.CalendarEvent;
 
@@ -15,11 +17,6 @@ const DEFAULT_LOCATION = PropertiesService.getScriptProperties().getProperty('DE
 const DEFAULT_TITLE = PropertiesService.getScriptProperties().getProperty('DEFAULT_TITLE');
 // 通知する時間
 const POPUP_MINUTES = PropertiesService.getScriptProperties().getProperty('POPUP_MINUTES');
-
-interface CalendarEventOptions {
-  description: string;
-  location: string;
-}
 
 /**
  * シートのデータをカレンダーに登録する

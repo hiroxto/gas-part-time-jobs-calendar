@@ -1,6 +1,14 @@
 {
   "compilerOptions": {
     "target": "ES2019",
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": ".",
+    "paths": {
+      "~/*": [
+        "./*"
+      ]
+    },
     "types": [
       "@types/google-apps-script"
     ]
