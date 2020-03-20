@@ -22,7 +22,6 @@ module.exports = {
     'no-console': 'off',
     'no-new': 'off',
     indent: ['error', 2],
-    'quote-props': ['error', 'as-needed'],
     'promise/catch-or-return': ['error', { allowThen: true, terminationMethod: ['catch', 'asCallback', 'finally'] }],
     '@typescript-eslint/array-type': ['error', { default: 'array' }],
     '@typescript-eslint/consistent-type-definitions': ['error', 'interface'],
