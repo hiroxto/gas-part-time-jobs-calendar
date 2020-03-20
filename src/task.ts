@@ -101,8 +101,8 @@ export function insertNewTask_ (taskTitle: string, options: TaskOptions): Task {
  * @private
  */
 export function createParentTask_ (setting: TaskSetting): Task {
-  const date = Utilities.formatDate(setting.rawDate, 'Asia/Tokyo', 'yyyy/MM/dd');
-  const title = `${date} ${PARENT_TASK_TITLE}`;
+  const titleDate = Utilities.formatDate(setting.rawDate, 'Asia/Tokyo', 'yyyy/MM/dd');
+  const title = `${titleDate} ${PARENT_TASK_TITLE}`;
   const options = {
     due: setting.date,
   };
