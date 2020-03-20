@@ -1,3 +1,5 @@
+import { TaskOptions, TaskSetting } from '~/types';
+
 // eslint-disable-next-line no-undef
 import Task = GoogleAppsScript.Tasks.Schema.Task;
 
@@ -7,18 +9,6 @@ const TASK_SHEET_NAME = PropertiesService.getScriptProperties().getProperty('TAS
 const TASK_LIST_ID = PropertiesService.getScriptProperties().getProperty('TASK_LIST_ID');
 // ベースのタイトル
 const PARENT_TASK_TITLE = PropertiesService.getScriptProperties().getProperty('PARENT_TASK_TITLE');
-
-interface TaskSetting {
-  rawDate: Date;
-  date: string;
-  lastRow: number;
-}
-
-interface TaskOptions {
-  due?: string;
-  parent?: string;
-  position?: string;
-}
 
 /**
  * シートに登録されたタスクを, カレンダーのタスクに登録する
