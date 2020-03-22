@@ -9,3 +9,9 @@ export interface TaskOptions {
   parent?: string;
   position?: string;
 }
+
+export interface TasksRegisterOption {
+  taskSheetName: string;
+  taskListId: string;
+  parentTaskTitle: string;
+}
