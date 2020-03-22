@@ -26,13 +26,13 @@ export class EventsRegister {
         `default_title : ${eventSetting.useDefaultTitle}`,
         `default_location : ${eventSetting.useDefaultLocation}`,
       ].join('\n').trim();
-      const options = { description, location };
+      const option = { description, location };
 
       const calendarEvent = eventSetting.id === ''
         ? this.createNewCalendarEvent(title, eventSetting.eventStartDateTime, eventSetting.eventEndDateTime)
         : this.updateCalendarEvent(eventSetting.id, title, eventSetting.eventStartDateTime, eventSetting.eventEndDateTime);
 
-      this.setCalendarOptions(calendarEvent, options);
+      this.setCalendarOption(calendarEvent, option);
       this.addPopupReminders(calendarEvent);
 
       sheet.getRange(rowNumber, 1).setValue(this.option.addedStatusValue);
@@ -126,12 +126,12 @@ export class EventsRegister {
    * イベントにオプションをセットする
    *
    * @param event セットする対象のイベント
-   * @param options イベントのオプション
+   * @param option イベントのオプション
    * @returns オプションを設定したイベント
    * @protected
    */
-  protected setCalendarOptions (event: CalendarEvent, options: CalendarEventOption): CalendarEvent {
-    return event.setDescription(options.description).setLocation(options.location);
+  protected setCalendarOption (event: CalendarEvent, option: CalendarEventOption): CalendarEvent {
+    return event.setDescription(option.description).setLocation(option.location);
   }
 
   /**
