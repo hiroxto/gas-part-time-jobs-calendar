@@ -1,10 +1,10 @@
 import { TasksRegisterOption, TaskOptions, TaskSetting, Task, Sheet } from '~/types';
 
 export class TasksRegister {
-  option: TasksRegisterOption;
+  options: TasksRegisterOption;
 
-  constructor (option: TasksRegisterOption) {
-    this.option = option;
+  constructor (options: TasksRegisterOption) {
+    this.options = options;
   }
 
   /**
@@ -69,7 +69,7 @@ export class TasksRegister {
    * @protected
    */
   protected getSheet (): Sheet {
-    return SpreadsheetApp.getActiveSpreadsheet().getSheetByName(this.option.taskSheetName);
+    return SpreadsheetApp.getActiveSpreadsheet().getSheetByName(this.options.taskSheetName);
   }
 
   /**
@@ -87,7 +87,7 @@ export class TasksRegister {
       newTask.due = options.due;
     }
 
-    return Tasks.Tasks.insert(newTask, this.option.taskListId, options);
+    return Tasks.Tasks.insert(newTask, this.options.taskListId, options);
   }
 
   /**
@@ -99,7 +99,7 @@ export class TasksRegister {
    */
   protected createParentTask (setting: TaskSetting): Task {
     const titleDate = Utilities.formatDate(setting.rawDate, 'Asia/Tokyo', 'yyyy/MM/dd');
-    const title = `${titleDate} ${this.option.parentTaskTitle}`;
+    const title = `${titleDate} ${this.options.parentTaskTitle}`;
     const options: TaskOptions = {
       due: setting.date,
     };
@@ -135,11 +135,11 @@ export function addTasks (): void {
   // ベースのタイトル
   const parentTaskTitle = PropertiesService.getScriptProperties().getProperty('PARENT_TASK_TITLE');
 
-  const option: TasksRegisterOption = {
+  const options: TasksRegisterOption = {
     taskSheetName,
     taskListId,
     parentTaskTitle,
   };
-  const tasksRegister = new TasksRegister(option);
+  const tasksRegister = new TasksRegister(options);
   tasksRegister.start();
 }
