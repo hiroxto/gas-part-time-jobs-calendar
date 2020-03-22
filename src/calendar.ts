@@ -1,127 +1,196 @@
-import { CalendarEventOptions } from '~/types';
+import { CalendarEventOptions, EventSetting, EventsRegisterOption } from '~/types';
 
 // eslint-disable-next-line no-undef
 import CalendarEvent = GoogleAppsScript.Calendar.CalendarEvent;
+// eslint-disable-next-line no-undef
+import Sheet = GoogleAppsScript.Spreadsheet.Sheet;
+// eslint-disable-next-line no-undef
+import Calendar = GoogleAppsScript.Calendar.Calendar;
 
-// 実行する status の値
-const EXECUTE_STATUS_VALUE = PropertiesService.getScriptProperties().getProperty('EXECUTE_STATUS_VALUE');
-// 実行完了後にセットする status の値
-const ADDED_STATUS_VALUE = PropertiesService.getScriptProperties().getProperty('ADDED_STATUS_VALUE');
-// 登録するカレンダーの ID
-const CALENDAR_ID = PropertiesService.getScriptProperties().getProperty('CALENDAR_ID');
-// データの入ったシート名
-const CALENDAR_SHEET_NAME = PropertiesService.getScriptProperties().getProperty('CALENDAR_SHEET_NAME');
-// 標準の場所
-const DEFAULT_LOCATION = PropertiesService.getScriptProperties().getProperty('DEFAULT_LOCATION');
-// 標準のタイトル
-const DEFAULT_TITLE = PropertiesService.getScriptProperties().getProperty('DEFAULT_TITLE');
-// 通知する時間
-const POPUP_MINUTES = PropertiesService.getScriptProperties().getProperty('POPUP_MINUTES');
+export class EventsRegister {
+  options: EventsRegisterOption;
+
+  constructor (options: EventsRegisterOption) {
+    this.options = options;
+  }
+
+  /**
+   * シートのデータをカレンダーに登録する
+   */
+  start (): void {
+    const sheet = this.getSheet();
+    for (let rowNumber = 2; rowNumber <= sheet.getLastRow(); rowNumber++) {
+      const eventSetting = this.getEventSetting(sheet, rowNumber);
+
+      if (eventSetting.status !== this.options.executeStatusValue) {
+        continue;
+      }
+
+      const title = eventSetting.useDefaultTitle ? this.options.defaultTitle : eventSetting.customTitle;
+      const location = eventSetting.useDefaultLocation ? this.options.defaultLocation : eventSetting.customLocation;
+      const description = [
+        eventSetting.baseDescription,
+        `default_title : ${eventSetting.useDefaultTitle}`,
+        `default_location : ${eventSetting.useDefaultLocation}`,
+      ].join('\n').trim();
+      const options = { description, location };
+
+      const calendarEvent = eventSetting.id === ''
+        ? this.createNewCalendarEvent(title, eventSetting.eventStartDateTime, eventSetting.eventEndDateTime)
+        : this.updateCalendarEvent(eventSetting.id, title, eventSetting.eventStartDateTime, eventSetting.eventEndDateTime);
+
+      this.setCalendarOptions(calendarEvent, options);
+      this.addPopupReminders(calendarEvent);
+
+      sheet.getRange(rowNumber, 1).setValue(this.options.addedStatusValue);
+      sheet.getRange(rowNumber, 2).setValue(calendarEvent.getId());
+    }
+  }
+
+  /**
+   * スプレッドシートを取得する
+   *
+   * @returns イベントの設定が入ったシート
+   * @protected
+   */
+  protected getSheet (): Sheet {
+    return SpreadsheetApp.getActiveSpreadsheet().getSheetByName(this.options.calendarSheetName);
+  }
+
+  /**
+   * カレンダーを取得する
+   *
+   * @returns 登録するカレンダー
+   * @protected
+   */
+  protected getCalendar (): Calendar {
+    return CalendarApp.getCalendarById(this.options.calendarId);
+  }
+
+  /**
+   * イベントの設定を取得する
+   *
+   * @param sheet スプレッドシート
+   * @param rowNumber 行番号
+   * @returns イベントの設定
+   * @protected
+   */
+  protected getEventSetting (sheet: Sheet, rowNumber: number): EventSetting {
+    let columnNumber = 1;
+    const status = sheet.getRange(rowNumber, columnNumber).getValue();
+    const id = sheet.getRange(rowNumber, ++columnNumber).getValue();
+    const useDefaultTitle = sheet.getRange(rowNumber, ++columnNumber).getValue();
+    const customTitle = sheet.getRange(rowNumber, ++columnNumber).getValue();
+    const eventStartDateTime = sheet.getRange(rowNumber, ++columnNumber).getValue();
+    const eventEndDateTime = sheet.getRange(rowNumber, ++columnNumber).getValue();
+    const useDefaultLocation = sheet.getRange(rowNumber, ++columnNumber).getValue();
+    const customLocation = sheet.getRange(rowNumber, ++columnNumber).getValue();
+    const baseDescription = sheet.getRange(rowNumber, ++columnNumber).getValue();
+
+    return {
+      status,
+      id,
+      useDefaultTitle,
+      customTitle,
+      eventStartDateTime,
+      eventEndDateTime,
+      useDefaultLocation,
+      customLocation,
+      baseDescription,
+    };
+  }
+
+  /**
+   * イベントを新規作成する
+   *
+   * @param title イベントのタイトル
+   * @param startDateTime イベントの開始日時
+   * @param endDateTime イベントの終了日時
+   * @returns 作成されたイベント
+   * @protected
+   */
+  protected createNewCalendarEvent (title: string, startDateTime: Date, endDateTime: Date): CalendarEvent {
+    return this.getCalendar().createEvent(title, startDateTime, endDateTime);
+  }
+
+  /**
+   * 既存のイベントを更新する
+   *
+   * @param id カレンダーのID
+   * @param title イベントのタイトル
+   * @param startDateTime イベントの開始日時
+   * @param endDateTime イベントの終了日時
+   * @returns 更新されたイベント
+   * @protected
+   */
+  protected updateCalendarEvent (id: string, title: string, startDateTime: Date, endDateTime: Date): CalendarEvent {
+    const event = this.getCalendar().getEventById(id);
+
+    return event.setTitle(title).setTime(startDateTime, endDateTime);
+  }
+
+  /**
+   * イベントにオプションをセットする
+   *
+   * @param event セットする対象のイベント
+   * @param options イベントのオプション
+   * @returns オプションを設定したイベント
+   * @protected
+   */
+  protected setCalendarOptions (event: CalendarEvent, options: CalendarEventOptions): CalendarEvent {
+    return event.setDescription(options.description).setLocation(options.location);
+  }
+
+  /**
+   * イベントに通知を設定する
+   * 既存の通知は削除される
+   *
+   * @param event 通知を設定するイベント
+   * @returns 通知を設定したイベント
+   * @protected
+   */
+  protected addPopupReminders (event: CalendarEvent): CalendarEvent {
+    const popupAts: number[] = this.options.popupMinutes.split(',').map(s => Number(s.trim()));
+
+    event.removeAllReminders();
+
+    popupAts.forEach(popupAt => {
+      event.addPopupReminder(popupAt);
+    });
+
+    return event;
+  }
+}
 
 /**
  * シートのデータをカレンダーに登録する
  */
 export function addEventsToGoogleCalendar (): void {
-  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(CALENDAR_SHEET_NAME);
+  const scriptProperties = PropertiesService.getScriptProperties();
+  // 実行する status の値
+  const executeStatusValue = scriptProperties.getProperty('EXECUTE_STATUS_VALUE');
+  // 実行完了後にセットする status の値
+  const addedStatusValue = scriptProperties.getProperty('ADDED_STATUS_VALUE');
+  // 登録するカレンダーの ID
+  const calendarId = scriptProperties.getProperty('CALENDAR_ID');
+  // データの入ったシート名
+  const calendarSheetName = scriptProperties.getProperty('CALENDAR_SHEET_NAME');
+  // 標準のタイトル
+  const defaultTitle = scriptProperties.getProperty('DEFAULT_TITLE');
+  // 標準の場所
+  const defaultLocation = scriptProperties.getProperty('DEFAULT_LOCATION');
+  // 通知する時間
+  const popupMinutes = scriptProperties.getProperty('POPUP_MINUTES');
 
-  for (let rowNumber = 2; rowNumber <= sheet.getLastRow(); rowNumber++) {
-    const status = sheet.getRange(rowNumber, 1).getValue();
-
-    if (status !== EXECUTE_STATUS_VALUE) {
-      continue;
-    }
-
-    let columnNumber = 2;
-    const id = sheet.getRange(rowNumber, columnNumber).getValue();
-    const useDefaultTitle = sheet.getRange(rowNumber, ++columnNumber).getValue() as boolean;
-    const customTitle = sheet.getRange(rowNumber, ++columnNumber).getValue();
-    const eventStartDateTime = sheet.getRange(rowNumber, ++columnNumber).getValue();
-    const eventEndDateTime = sheet.getRange(rowNumber, ++columnNumber).getValue();
-    const useDefaultLocation = sheet.getRange(rowNumber, ++columnNumber).getValue() as boolean;
-    const customLocation = sheet.getRange(rowNumber, ++columnNumber).getValue();
-    const baseDescription = sheet.getRange(rowNumber, ++columnNumber).getValue();
-
-    const title = useDefaultTitle ? DEFAULT_TITLE : customTitle;
-    const location = useDefaultLocation ? DEFAULT_LOCATION : customLocation;
-    const description = [
-      baseDescription,
-      `default_title : ${useDefaultTitle}`,
-      `default_location : ${useDefaultLocation}`,
-    ].join('\n').trim();
-    const options: CalendarEventOptions = { description, location };
-
-    const calendarEvent = id === ''
-      ? createNewCalendarEvent_(title, eventStartDateTime, eventEndDateTime)
-      : updateCalendarEvent_(id, title, eventStartDateTime, eventEndDateTime);
-
-    setCalendarOptions_(calendarEvent, options);
-    addPopupReminders_(calendarEvent);
-
-    sheet.getRange(rowNumber, 1).setValue(ADDED_STATUS_VALUE);
-    sheet.getRange(rowNumber, 2).setValue(calendarEvent.getId());
-  }
-}
-
-/**
- * イベントを新規作成する
- *
- * @param title イベントのタイトル
- * @param startDateTime イベントの開始日時
- * @param endDateTime イベントの終了日時
- * @returns 作成されたイベント
- * @private
- */
-export function createNewCalendarEvent_ (title: string, startDateTime: Date, endDateTime: Date): CalendarEvent {
-  const calendar = CalendarApp.getCalendarById(CALENDAR_ID);
-
-  return calendar.createEvent(title, startDateTime, endDateTime);
-}
-
-/**
- * 既存のイベントを更新する
- *
- * @param id カレンダーのID
- * @param title イベントのタイトル
- * @param startDateTime イベントの開始日時
- * @param endDateTime イベントの終了日時
- * @returns 更新されたイベント
- * @private
- */
-export function updateCalendarEvent_ (id: string, title: string, startDateTime: Date, endDateTime: Date): CalendarEvent {
-  const calendar = CalendarApp.getCalendarById(CALENDAR_ID);
-  const event = calendar.getEventById(id);
-
-  return event.setTitle(title).setTime(startDateTime, endDateTime);
-}
-
-/**
- * イベントにオプションをセットする
- *
- * @param event セットする対象のイベント
- * @param options イベントのオプション
- * @returns オプションを設定したイベント
- * @private
- */
-export function setCalendarOptions_ (event: CalendarEvent, options: CalendarEventOptions): CalendarEvent {
-  return event.setDescription(options.description).setLocation(options.location);
-}
-
-/**
- * イベントに通知を設定する
- * 既存の通知は削除される
- *
- * @param event 通知を設定するイベント
- * @returns 通知を設定したイベント
- * @private
- */
-export function addPopupReminders_ (event: CalendarEvent): CalendarEvent {
-  const popupAts: number[] = POPUP_MINUTES.split(',').map(s => Number(s.trim()));
-
-  event.removeAllReminders();
-
-  popupAts.forEach(popupAt => {
-    event.addPopupReminder(popupAt);
-  });
-
-  return event;
+  const options: EventsRegisterOption = {
+    executeStatusValue,
+    addedStatusValue,
+    calendarId,
+    defaultTitle,
+    calendarSheetName,
+    defaultLocation,
+    popupMinutes,
+  };
+  const eventsRegister = new EventsRegister(options);
+  eventsRegister.start();
 }
