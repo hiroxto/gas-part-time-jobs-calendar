@@ -3,7 +3,7 @@ export interface CalendarEventOptions {
   location: string;
 }
 
-interface EventSetting {
+export interface EventSetting {
   status: string;
   id: string;
   useDefaultTitle: boolean;
@@ -15,7 +15,7 @@ interface EventSetting {
   baseDescription: string;
 }
 
-interface EventsRegisterOption {
+export interface EventsRegisterOption {
   executeStatusValue: string;
   addedStatusValue: string;
   calendarId: string;
