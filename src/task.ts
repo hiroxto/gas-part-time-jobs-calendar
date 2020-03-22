@@ -1,19 +1,19 @@
-import { TasksRegisterOption, TaskOptions, TaskSetting, Task, Sheet } from '~/types';
+import { TasksRegisterOptions, TaskOptions, TaskSettings, Task, Sheet } from '~/types';
 
 export class TasksRegister {
-  option: TasksRegisterOption;
+  options: TasksRegisterOptions;
 
-  constructor (option: TasksRegisterOption) {
-    this.option = option;
+  constructor (options: TasksRegisterOptions) {
+    this.options = options;
   }
 
   /**
    * シートに登録されたタスクを, カレンダーのタスクに登録する
    */
   start (): void {
-    const setting = this.getSetting();
-    const taskTitles = this.getTaskTitles(setting.lastRow);
-    const parentTask = this.createParentTask(setting);
+    const settings = this.getSettings();
+    const taskTitles = this.getTaskTitles(settings.lastRow);
+    const parentTask = this.createParentTask(settings);
 
     taskTitles.reverse().forEach((taskTitle) => {
       this.createChidedTask(taskTitle, parentTask);
@@ -27,7 +27,7 @@ export class TasksRegister {
    * @returns タスクの設定
    * @protected
    */
-  protected getSetting (): TaskSetting {
+  protected getSettings (): TaskSettings {
     const sheet = this.getSheet();
     const rawDate = sheet.getRange(2, 5).getValue();
     const date = Utilities.formatDate(rawDate, 'Asia/Tokyo', "yyyy-MM-dd'T'HH:mm:ss'Z'");
@@ -69,7 +69,7 @@ export class TasksRegister {
    * @protected
    */
   protected getSheet (): Sheet {
-    return SpreadsheetApp.getActiveSpreadsheet().getSheetByName(this.option.taskSheetName);
+    return SpreadsheetApp.getActiveSpreadsheet().getSheetByName(this.options.taskSheetName);
   }
 
   /**
@@ -87,21 +87,21 @@ export class TasksRegister {
       newTask.due = options.due;
     }
 
-    return Tasks.Tasks.insert(newTask, this.option.taskListId, options);
+    return Tasks.Tasks.insert(newTask, this.options.taskListId, options);
   }
 
   /**
    * 親のタスクを作成する
    *
-   * @param setting タスクの設定
+   * @param settings タスクの設定
    * @returns 作成されたタスク
    * @protected
    */
-  protected createParentTask (setting: TaskSetting): Task {
-    const titleDate = Utilities.formatDate(setting.rawDate, 'Asia/Tokyo', 'yyyy/MM/dd');
-    const title = `${titleDate} ${this.option.parentTaskTitle}`;
+  protected createParentTask (settings: TaskSettings): Task {
+    const titleDate = Utilities.formatDate(settings.rawDate, 'Asia/Tokyo', 'yyyy/MM/dd');
+    const title = `${titleDate} ${this.options.parentTaskTitle}`;
     const options: TaskOptions = {
-      due: setting.date,
+      due: settings.date,
     };
 
     return this.insertNewTask(title, options);
@@ -135,11 +135,11 @@ export function addTasks (): void {
   // ベースのタイトル
   const parentTaskTitle = PropertiesService.getScriptProperties().getProperty('PARENT_TASK_TITLE');
 
-  const option: TasksRegisterOption = {
+  const options: TasksRegisterOptions = {
     taskSheetName,
     taskListId,
     parentTaskTitle,
   };
-  const tasksRegister = new TasksRegister(option);
+  const tasksRegister = new TasksRegister(options);
   tasksRegister.start();
 }

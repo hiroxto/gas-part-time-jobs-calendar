@@ -1,4 +1,4 @@
-export interface TaskSetting {
+export interface TaskSettings {
   rawDate: Date;
   date: string;
   lastRow: number;
@@ -10,7 +10,7 @@ export interface TaskOptions {
   position?: string;
 }
 
-export interface TasksRegisterOption {
+export interface TasksRegisterOptions {
   taskSheetName: string;
   taskListId: string;
   parentTaskTitle: string;
