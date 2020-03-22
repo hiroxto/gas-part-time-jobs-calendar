@@ -76,18 +76,18 @@ export class TasksRegister {
    * 新しいタスクを追加する
    *
    * @param taskTitle タスクのタイトル
-   * @param options タスクのオプション
+   * @param option タスクのオプション
    * @returns 作成されたタスク
    * @protected
    */
-  protected insertNewTask (taskTitle: string, options: TaskOption): Task {
+  protected insertNewTask (taskTitle: string, option: TaskOption): Task {
     const newTask = Tasks.newTask();
     newTask.title = taskTitle;
-    if (options.due) {
-      newTask.due = options.due;
+    if (option.due) {
+      newTask.due = option.due;
     }
 
-    return Tasks.Tasks.insert(newTask, this.option.taskListId, options);
+    return Tasks.Tasks.insert(newTask, this.option.taskListId, option);
   }
 
   /**
@@ -100,11 +100,11 @@ export class TasksRegister {
   protected createParentTask (setting: TaskSetting): Task {
     const titleDate = Utilities.formatDate(setting.rawDate, 'Asia/Tokyo', 'yyyy/MM/dd');
     const title = `${titleDate} ${this.option.parentTaskTitle}`;
-    const options: TaskOption = {
+    const option: TaskOption = {
       due: setting.date,
     };
 
-    return this.insertNewTask(title, options);
+    return this.insertNewTask(title, option);
   }
 
   /**
@@ -116,11 +116,11 @@ export class TasksRegister {
    * @protected
    */
   protected createChidedTask (taskTitle: string, parentTask: Task): Task {
-    const options: TaskOption = {
+    const option: TaskOption = {
       parent: parentTask.id,
     };
 
-    return this.insertNewTask(taskTitle, options);
+    return this.insertNewTask(taskTitle, option);
   }
 }
 
