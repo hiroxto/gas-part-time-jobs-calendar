@@ -175,7 +175,7 @@ export function addEventsToGoogleCalendar (): void {
   // 通知する時間
   const popupMinutes = scriptProperties.getProperty('POPUP_MINUTES');
 
-  const option: EventsRegisterOption = {
+  const options: EventsRegisterOption = {
     executeStatusValue,
     addedStatusValue,
     calendarId,
@@ -184,6 +184,6 @@ export function addEventsToGoogleCalendar (): void {
     defaultLocation,
     popupMinutes,
   };
-  const eventsRegister = new EventsRegister(option);
+  const eventsRegister = new EventsRegister(options);
   eventsRegister.start();
 }
