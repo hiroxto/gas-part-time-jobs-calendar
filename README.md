@@ -2,7 +2,7 @@
 
 ![GitHub Actions Node CI Status](https://github.com/hiroxto/gas-part-time-jobs-calendar/workflows/Node%20CI/badge.svg)
 
-アルバイトのカレンダーを自動入力する Google Apps Script
+アルバイトのカレンダーとタスクを自動入力する Google Apps Script
 
 ## Install
 
