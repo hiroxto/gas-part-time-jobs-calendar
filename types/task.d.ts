@@ -4,7 +4,7 @@ export interface TaskSetting {
   lastRow: number;
 }
 
-export interface TaskOptions {
+export interface TaskOption {
   due?: string;
   parent?: string;
   position?: string;

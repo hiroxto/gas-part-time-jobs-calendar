@@ -1,4 +1,4 @@
-import { TasksRegisterOption, TaskOptions, TaskSetting, Task, Sheet } from '~/types';
+import { TasksRegisterOption, TaskOption, TaskSetting, Task, Sheet } from '~/types';
 
 export class TasksRegister {
   option: TasksRegisterOption;
@@ -80,7 +80,7 @@ export class TasksRegister {
    * @returns 作成されたタスク
    * @protected
    */
-  protected insertNewTask (taskTitle: string, options: TaskOptions): Task {
+  protected insertNewTask (taskTitle: string, options: TaskOption): Task {
     const newTask = Tasks.newTask();
     newTask.title = taskTitle;
     if (options.due) {
@@ -100,7 +100,7 @@ export class TasksRegister {
   protected createParentTask (setting: TaskSetting): Task {
     const titleDate = Utilities.formatDate(setting.rawDate, 'Asia/Tokyo', 'yyyy/MM/dd');
     const title = `${titleDate} ${this.option.parentTaskTitle}`;
-    const options: TaskOptions = {
+    const options: TaskOption = {
       due: setting.date,
     };
 
@@ -116,7 +116,7 @@ export class TasksRegister {
    * @protected
    */
   protected createChidedTask (taskTitle: string, parentTask: Task): Task {
-    const options: TaskOptions = {
+    const options: TaskOption = {
       parent: parentTask.id,
     };
 
