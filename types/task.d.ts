@@ -1,4 +1,4 @@
-export interface TaskSetting {
+export interface TaskSettings {
   rawDate: Date;
   date: string;
   lastRow: number;
