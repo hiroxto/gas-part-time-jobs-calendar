@@ -1,9 +1,9 @@
-import { TasksRegisterOption, TaskOptions, TaskSetting, Task, Sheet } from '~/types';
+import { TasksRegisterOptions, TaskOptions, TaskSetting, Task, Sheet } from '~/types';
 
 export class TasksRegister {
-  options: TasksRegisterOption;
+  options: TasksRegisterOptions;
 
-  constructor (options: TasksRegisterOption) {
+  constructor (options: TasksRegisterOptions) {
     this.options = options;
   }
 
@@ -135,7 +135,7 @@ export function addTasks (): void {
   // ベースのタイトル
   const parentTaskTitle = PropertiesService.getScriptProperties().getProperty('PARENT_TASK_TITLE');
 
-  const options: TasksRegisterOption = {
+  const options: TasksRegisterOptions = {
     taskSheetName,
     taskListId,
     parentTaskTitle,
