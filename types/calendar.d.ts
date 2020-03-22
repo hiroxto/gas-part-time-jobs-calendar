@@ -1,4 +1,4 @@
-export interface CalendarEventOptions {
+export interface CalendarEventOption {
   description: string;
   location: string;
 }

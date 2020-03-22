@@ -1,4 +1,4 @@
-import { CalendarEventOptions, EventSetting, EventsRegisterOption, Calendar, CalendarEvent, Sheet } from '~/types';
+import { CalendarEventOption, EventSetting, EventsRegisterOption, Calendar, CalendarEvent, Sheet } from '~/types';
 
 export class EventsRegister {
   option: EventsRegisterOption;
@@ -130,7 +130,7 @@ export class EventsRegister {
    * @returns オプションを設定したイベント
    * @protected
    */
-  protected setCalendarOptions (event: CalendarEvent, options: CalendarEventOptions): CalendarEvent {
+  protected setCalendarOptions (event: CalendarEvent, options: CalendarEventOption): CalendarEvent {
     return event.setDescription(options.description).setLocation(options.location);
   }
 
