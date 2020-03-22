@@ -1,10 +1,10 @@
 import { CalendarEventOptions, EventSetting, EventsRegisterOption, Calendar, CalendarEvent, Sheet } from '~/types';
 
 export class EventsRegister {
-  option: EventsRegisterOption;
+  options: EventsRegisterOption;
 
-  constructor (option: EventsRegisterOption) {
-    this.option = option;
+  constructor (options: EventsRegisterOption) {
+    this.options = options;
   }
 
   /**
@@ -15,12 +15,12 @@ export class EventsRegister {
     for (let rowNumber = 2; rowNumber <= sheet.getLastRow(); rowNumber++) {
       const eventSetting = this.getEventSetting(sheet, rowNumber);
 
-      if (eventSetting.status !== this.option.executeStatusValue) {
+      if (eventSetting.status !== this.options.executeStatusValue) {
         continue;
       }
 
-      const title = eventSetting.useDefaultTitle ? this.option.defaultTitle : eventSetting.customTitle;
-      const location = eventSetting.useDefaultLocation ? this.option.defaultLocation : eventSetting.customLocation;
+      const title = eventSetting.useDefaultTitle ? this.options.defaultTitle : eventSetting.customTitle;
+      const location = eventSetting.useDefaultLocation ? this.options.defaultLocation : eventSetting.customLocation;
       const description = [
         eventSetting.baseDescription,
         `default_title : ${eventSetting.useDefaultTitle}`,
@@ -35,7 +35,7 @@ export class EventsRegister {
       this.setCalendarOptions(calendarEvent, options);
       this.addPopupReminders(calendarEvent);
 
-      sheet.getRange(rowNumber, 1).setValue(this.option.addedStatusValue);
+      sheet.getRange(rowNumber, 1).setValue(this.options.addedStatusValue);
       sheet.getRange(rowNumber, 2).setValue(calendarEvent.getId());
     }
   }
@@ -47,7 +47,7 @@ export class EventsRegister {
    * @protected
    */
   protected getSheet (): Sheet {
-    return SpreadsheetApp.getActiveSpreadsheet().getSheetByName(this.option.calendarSheetName);
+    return SpreadsheetApp.getActiveSpreadsheet().getSheetByName(this.options.calendarSheetName);
   }
 
   /**
@@ -57,7 +57,7 @@ export class EventsRegister {
    * @protected
    */
   protected getCalendar (): Calendar {
-    return CalendarApp.getCalendarById(this.option.calendarId);
+    return CalendarApp.getCalendarById(this.options.calendarId);
   }
 
   /**
@@ -143,7 +143,7 @@ export class EventsRegister {
    * @protected
    */
   protected addPopupReminders (event: CalendarEvent): CalendarEvent {
-    const popupAts: number[] = this.option.popupMinutes.split(',').map(s => Number(s.trim()));
+    const popupAts: number[] = this.options.popupMinutes.split(',').map(s => Number(s.trim()));
 
     event.removeAllReminders();
 
