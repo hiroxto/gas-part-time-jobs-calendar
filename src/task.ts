@@ -1,9 +1,4 @@
-import { TasksRegisterOption, TaskOptions, TaskSetting } from '~/types';
-
-// eslint-disable-next-line no-undef
-import Task = GoogleAppsScript.Tasks.Schema.Task;
-// eslint-disable-next-line no-undef
-import Sheet = GoogleAppsScript.Spreadsheet.Sheet;
+import { TasksRegisterOption, TaskOptions, TaskSetting, Task, Sheet } from '~/types';
 
 export class TasksRegister {
   option: TasksRegisterOption;

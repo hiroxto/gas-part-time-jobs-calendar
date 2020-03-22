@@ -1,11 +1,4 @@
-import { CalendarEventOptions, EventSetting, EventsRegisterOption } from '~/types';
-
-// eslint-disable-next-line no-undef
-import CalendarEvent = GoogleAppsScript.Calendar.CalendarEvent;
-// eslint-disable-next-line no-undef
-import Sheet = GoogleAppsScript.Spreadsheet.Sheet;
-// eslint-disable-next-line no-undef
-import Calendar = GoogleAppsScript.Calendar.Calendar;
+import { CalendarEventOptions, EventSetting, EventsRegisterOption, Calendar, CalendarEvent, Sheet } from '~/types';
 
 export class EventsRegister {
   option: EventsRegisterOption;
