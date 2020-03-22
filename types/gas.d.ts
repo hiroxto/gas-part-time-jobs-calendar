@@ -5,8 +5,8 @@ import Sheet = GoogleAppsScript.Spreadsheet.Sheet;
 import Task = GoogleAppsScript.Tasks.Schema.Task;
 
 export {
+  Calendar,
   CalendarEvent,
   Sheet,
-  Calendar,
   Task,
 };
