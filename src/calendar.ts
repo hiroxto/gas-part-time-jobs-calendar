@@ -1,9 +1,9 @@
-import { CalendarEventOptions, EventSetting, EventsRegisterOption, Calendar, CalendarEvent, Sheet } from '~/types';
+import { CalendarEventOptions, EventSetting, EventsRegisterOptions, Calendar, CalendarEvent, Sheet } from '~/types';
 
 export class EventsRegister {
-  options: EventsRegisterOption;
+  options: EventsRegisterOptions;
 
-  constructor (options: EventsRegisterOption) {
+  constructor (options: EventsRegisterOptions) {
     this.options = options;
   }
 
@@ -175,7 +175,7 @@ export function addEventsToGoogleCalendar (): void {
   // 通知する時間
   const popupMinutes = scriptProperties.getProperty('POPUP_MINUTES');
 
-  const options: EventsRegisterOption = {
+  const options: EventsRegisterOptions = {
     executeStatusValue,
     addedStatusValue,
     calendarId,

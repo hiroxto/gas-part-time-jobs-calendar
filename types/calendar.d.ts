@@ -15,7 +15,7 @@ export interface EventSetting {
   baseDescription: string;
 }
 
-export interface EventsRegisterOption {
+export interface EventsRegisterOptions {
   executeStatusValue: string;
   addedStatusValue: string;
   calendarId: string;
