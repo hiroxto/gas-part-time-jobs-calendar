@@ -1,4 +1,4 @@
-import { CalendarEventOptions, EventSetting, EventsRegisterOptions, Calendar, CalendarEvent, Sheet } from '~/types';
+import { CalendarEventOptions, EventSettings, EventsRegisterOptions, Calendar, CalendarEvent, Sheet } from '~/types';
 
 export class EventsRegister {
   options: EventsRegisterOptions;
@@ -13,24 +13,24 @@ export class EventsRegister {
   start (): void {
     const sheet = this.getSheet();
     for (let rowNumber = 2; rowNumber <= sheet.getLastRow(); rowNumber++) {
-      const eventSetting = this.getEventSetting(sheet, rowNumber);
+      const eventSettings = this.getEventSettings(sheet, rowNumber);
 
-      if (eventSetting.status !== this.options.executeStatusValue) {
+      if (eventSettings.status !== this.options.executeStatusValue) {
         continue;
       }
 
-      const title = eventSetting.useDefaultTitle ? this.options.defaultTitle : eventSetting.customTitle;
-      const location = eventSetting.useDefaultLocation ? this.options.defaultLocation : eventSetting.customLocation;
+      const title = eventSettings.useDefaultTitle ? this.options.defaultTitle : eventSettings.customTitle;
+      const location = eventSettings.useDefaultLocation ? this.options.defaultLocation : eventSettings.customLocation;
       const description = [
-        eventSetting.baseDescription,
-        `default_title : ${eventSetting.useDefaultTitle}`,
-        `default_location : ${eventSetting.useDefaultLocation}`,
+        eventSettings.baseDescription,
+        `default_title : ${eventSettings.useDefaultTitle}`,
+        `default_location : ${eventSettings.useDefaultLocation}`,
       ].join('\n').trim();
       const options = { description, location };
 
-      const calendarEvent = eventSetting.id === ''
-        ? this.createNewCalendarEvent(title, eventSetting.eventStartDateTime, eventSetting.eventEndDateTime)
-        : this.updateCalendarEvent(eventSetting.id, title, eventSetting.eventStartDateTime, eventSetting.eventEndDateTime);
+      const calendarEvent = eventSettings.id === ''
+        ? this.createNewCalendarEvent(title, eventSettings.eventStartDateTime, eventSettings.eventEndDateTime)
+        : this.updateCalendarEvent(eventSettings.id, title, eventSettings.eventStartDateTime, eventSettings.eventEndDateTime);
 
       this.setCalendarOptions(calendarEvent, options);
       this.addPopupReminders(calendarEvent);
@@ -68,7 +68,7 @@ export class EventsRegister {
    * @returns イベントの設定
    * @protected
    */
-  protected getEventSetting (sheet: Sheet, rowNumber: number): EventSetting {
+  protected getEventSettings (sheet: Sheet, rowNumber: number): EventSettings {
     let columnNumber = 1;
     const status = sheet.getRange(rowNumber, columnNumber).getValue();
     const id = sheet.getRange(rowNumber, ++columnNumber).getValue();
