@@ -13,6 +13,24 @@ $ yarn install
 $ cp .clasp.example.json .clasp.json
 ```
 
+## Setting
+
+カレンダーとタスクの登録を実行するにはプロパティの設定が必要.
+
+`ファイル -> プロジェクトのプロパティ -> スクリプトのプロパティ` から, 下記のプロパティを設定する.
+
+### カレンダー登録の設定
+
+|プロパティ名|値の説明|値の例|
+|:---:|:---:|:---:|
+|EXECUTE_STATUS_VALUE|登録, 更新を実行する対象の値|登録/更新する|
+|ADDED_STATUS_VALUE|実行完了後の値|登録完了|
+|CALENDAR_ID|登録するカレンダーのID|hogehoge@group.calendar.google.com|
+|CALENDAR_SHEET_NAME|データの入ったシート名|勤務データ|
+|DEFAULT_TITLE|標準のタイトル|アルバイト|
+|DEFAULT_LOCATION|標準の場所|勤務先|
+|POPUP_MINUTES|通知する時間. `,` で区切る. 単位 : 分|30,60,180,1440|
+
 ## Publish
 
 ```sh
