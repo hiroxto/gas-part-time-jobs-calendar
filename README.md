@@ -41,6 +41,8 @@ $ cp .clasp.example.json .clasp.json
 
 ## Publish
 
+`.clasp.json` の `scriptId` を設定して, 以下のコマンドを実行する
+
 ```sh
 $ yarn run push
 ```
