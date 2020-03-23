@@ -31,6 +31,14 @@ $ cp .clasp.example.json .clasp.json
 |DEFAULT_LOCATION|標準の場所|勤務先|
 |POPUP_MINUTES|通知する時間. `,` で区切る. 単位 : 分|30,60,180,1440|
 
+### タスク登録の設定
+
+|プロパティ名|値の説明|値の例|
+|:---:|:---:|:---:|
+|TASK_SHEET_NAME|タスクのデータが入ったシート名|タスク登録データ|
+|TASK_LIST_ID|タスクリストの ID|hogehoge|
+|PARENT_TASK_TITLE|タイトルのベース|アルバイト 持ち物確認|
+
 ## Publish
 
 ```sh
