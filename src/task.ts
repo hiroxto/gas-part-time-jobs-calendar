@@ -48,13 +48,13 @@ export class TasksRegister {
    * @protected
    */
   protected getTaskTitles (lastRow: number): string[] {
-    const taskTitles = [];
+    const taskTitles: string[] = [];
     const sheet = this.getSheet();
 
     for (let rowNumber = 2; rowNumber <= lastRow; rowNumber++) {
       const isEnable = sheet.getRange(rowNumber, 1).getValue() as boolean;
       if (isEnable) {
-        const taskTitle = sheet.getRange(rowNumber, 2).getValue();
+        const taskTitle = sheet.getRange(rowNumber, 2).getValue() as string;
         taskTitles.push(taskTitle);
       }
     }
