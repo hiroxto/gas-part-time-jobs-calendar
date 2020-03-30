@@ -24,6 +24,5 @@ module.exports = {
     indent: ['error', 2],
     'promise/catch-or-return': ['error', { allowThen: true, terminationMethod: ['catch', 'asCallback', 'finally'] }],
     '@typescript-eslint/consistent-type-definitions': ['error', 'interface'],
-    '@typescript-eslint/no-use-before-define': 'off',
   },
 };
