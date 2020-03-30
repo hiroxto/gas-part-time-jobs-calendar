@@ -23,5 +23,7 @@ module.exports = {
     'no-new': 'off',
     indent: ['error', 2],
     'promise/catch-or-return': ['error', { allowThen: true, terminationMethod: ['catch', 'asCallback', 'finally'] }],
+    '@typescript-eslint/array-type': ['error', { default: 'array' }],
+    '@typescript-eslint/consistent-type-definitions': ['error', 'interface'],
   },
 };
