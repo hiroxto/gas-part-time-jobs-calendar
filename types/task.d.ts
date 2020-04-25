@@ -1,6 +1,6 @@
 export interface TaskSettings {
   rawDate: Date;
-  date: string;
+  due: string;
   lastRow: number;
 }
 

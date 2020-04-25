@@ -30,12 +30,12 @@ export class TasksRegister {
   protected getSettings (): TaskSettings {
     const sheet = this.getSheet();
     const rawDate = sheet.getRange(2, 5).getValue();
-    const date = Utilities.formatDate(rawDate, 'Asia/Tokyo', "yyyy-MM-dd'T'HH:mm:ss'Z'");
+    const due = Utilities.formatDate(rawDate, 'Asia/Tokyo', "yyyy-MM-dd'T'HH:mm:ss'Z'");
     const lastRow = sheet.getRange(3, 5).getValue();
 
     return {
       rawDate,
-      date,
+      due,
       lastRow,
     };
   }
@@ -101,7 +101,7 @@ export class TasksRegister {
     const titleDate = Utilities.formatDate(settings.rawDate, 'Asia/Tokyo', 'yyyy/MM/dd');
     const title = `${titleDate} ${this.options.parentTaskTitle}`;
     const options: TaskOptions = {
-      due: settings.date,
+      due: settings.due,
     };
 
     return this.insertNewTask(title, options);
