@@ -24,11 +24,11 @@ jobs:
           cache-name: cache-node_modules
         with:
           path: node_modules
-          key: gas-pjc-build-${{ env.cache-name }}-${{ hashFiles('yarn.lock') }}
+          key: gas-pjc-tests-${{ env.cache-name }}-${{ hashFiles('yarn.lock') }}
           restore-keys: |
-            gas-pjc-build-${{ env.cache-name }}-${{ hashFiles('yarn.lock') }}
-            gas-pjc-build-${{ env.cache-name }}-
-            gas-pjc-build-
+            gas-pjc-tests-${{ env.cache-name }}-${{ hashFiles('yarn.lock') }}
+            gas-pjc-tests-${{ env.cache-name }}-
+            gas-pjc-tests-
 
       - run: yarn install
 
