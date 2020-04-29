@@ -18,6 +18,10 @@ export class Application {
     const sheet = this.getSheet();
 
     for (let rowNumber = 2; rowNumber <= sheet.getLastRow(); rowNumber++) {
+      const settings = this.loadSettings(sheet, rowNumber);
+
+      this.registerEvent(settings);
+      this.registerTask(settings);
     }
   }
 
