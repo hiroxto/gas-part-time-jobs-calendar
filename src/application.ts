@@ -28,8 +28,13 @@ export class Application {
     for (let rowNumber = 2; rowNumber <= sheet.getLastRow(); rowNumber++) {
       const settings = this.loadSettings(sheet, rowNumber);
 
-      this.registerEvent(settings);
-      this.registerTask(settings);
+      if (settings.event.status === this.options.executeStatusValue) {
+        this.registerEvent(settings);
+      }
+
+      if (settings.task.status === this.options.executeStatusValue) {
+        this.registerTask(settings);
+      }
     }
   }
 
