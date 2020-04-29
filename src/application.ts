@@ -64,6 +64,8 @@ export class Application {
     };
 
     return {
+      sheet: sheet,
+      rowNumber: rowNumber,
       event: eventSettings,
       task: taskSettings,
     };

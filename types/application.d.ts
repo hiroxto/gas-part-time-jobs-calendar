@@ -1,3 +1,6 @@
+/* eslint-disable no-undef */
+import Sheet = GoogleAppsScript.Spreadsheet.Sheet;
+
 export interface ApplicationOptions {
   sheetName: string;
   executeStatusValue: string;
@@ -20,6 +23,8 @@ export interface TaskOptions {
 }
 
 export interface Settings {
+  sheet: Sheet;
+  rowNumber: number;
   event: EventSettings;
   task: TaskSettings;
 }
