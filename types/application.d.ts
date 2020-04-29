@@ -4,6 +4,7 @@ export interface ApplicationOptions {
   sheetName: string;
   executeStatusValue: string;
   addedStatusValue: string;
+  lastRowStatusValue: string;
   event: EventOptions;
   task: TaskOptions;
 }
