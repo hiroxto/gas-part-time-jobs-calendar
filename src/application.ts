@@ -344,7 +344,7 @@ export function start (): void {
   const scriptProperties = PropertiesService.getScriptProperties();
 
   // データの入ったシート名
-  const calendarSheetName = scriptProperties.getProperty('CALENDAR_SHEET_NAME');
+  const baseSheetName = scriptProperties.getProperty('BASE_SHEET_NAME');
   // 実行する status の値
   const executeStatusValue = scriptProperties.getProperty('EXECUTE_STATUS_VALUE');
   // 実行完了後にセットする status の値
@@ -380,7 +380,7 @@ export function start (): void {
   };
 
   const applicationOptions: ApplicationOptions = {
-    sheetName: calendarSheetName,
+    sheetName: baseSheetName,
     executeStatusValue: executeStatusValue,
     addedStatusValue: addedStatusValue,
     event: eventOptions,
