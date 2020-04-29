@@ -1,5 +1,5 @@
-import { ApplicationOptions, Settings, EventSettings, TaskSettings } from '~/types/application';
-import { Calendar, CalendarEvent, Sheet } from '~/types';
+import { ApplicationOptions, Settings, EventSettings, TaskSettings, TaskInsertOptions } from '~/types/application';
+import { Calendar, CalendarEvent, Sheet, Task } from '~/types';
 
 export class Application {
   options: ApplicationOptions;
@@ -222,5 +222,101 @@ export class TaskRegister {
    * 登録を開始する
    */
   start (): void{
+    const { sheet, rowNumber, task } = this.settings;
+
+    if (task.status !== this.options.executeStatusValue) {
+      return;
+    }
+
+    const taskTitles = this.getTaskTitles();
+    const parentTask = this.createParentTask();
+
+    taskTitles.reverse().forEach((taskTitle) => {
+      this.createChidedTask(taskTitle, parentTask);
+    });
+
+    sheet.getRange(rowNumber, 3).setValue(this.options.addedStatusValue);
+    sheet.getRange(rowNumber, 4).setValue(parentTask.id);
+  }
+
+  /**
+   * 登録するタスクのタイトルのリストを取得する
+   *
+   * @returns タスクのタイトルのリスト
+   */
+  protected getTaskTitles (): string[] {
+    const taskTitles: string[] = [];
+    const tasksSheet = this.getTasksSheet();
+    const lastRow = 20;
+
+    for (let rowNumber = 2; rowNumber <= lastRow; rowNumber++) {
+      const isEnable = tasksSheet.getRange(rowNumber, 1).getValue() as boolean;
+
+      if (isEnable) {
+        const taskTitle = tasksSheet.getRange(rowNumber, 2).getValue() as string;
+        taskTitles.push(taskTitle);
+      }
+    }
+
+    return taskTitles;
+  }
+
+  /**
+   * 新しいタスクを追加する
+   *
+   * @param taskTitle タスクのタイトル
+   * @param options タスクのオプション
+   * @returns 作成されたタスク
+   */
+  protected insertNewTask (taskTitle: string, options: TaskInsertOptions): Task {
+    const newTask = Tasks.newTask();
+    newTask.title = taskTitle;
+    if (options.due) {
+      newTask.due = options.due;
+    }
+
+    return Tasks.Tasks.insert(newTask, this.options.task.taskListId, options);
+  }
+
+  /**
+   * 親のタスクを作成する
+   *
+   * @returns 作成されたタスク
+   */
+  protected createParentTask (): Task {
+    const startDateTime = this.settings.event.eventStartDateTime;
+    const timeZone = 'Asia/Tokyo';
+    const due = Utilities.formatDate(startDateTime, timeZone, "yyyy-MM-dd'T'HH:mm:ss'Z'");
+    const titleDate = Utilities.formatDate(startDateTime, timeZone, 'yyyy/MM/dd');
+    const title = `${titleDate} ${this.options.task.parentTaskTitle}`;
+    const options: TaskInsertOptions = {
+      due,
+    };
+
+    return this.insertNewTask(title, options);
+  }
+
+  /**
+   * サブタスクを設定する
+   *
+   * @param taskTitle タスクのタイトル
+   * @param parentTask 親タスク
+   * @return 作成されたタスク
+   */
+  protected createChidedTask (taskTitle: string, parentTask: Task): Task {
+    const options: TaskInsertOptions = {
+      parent: parentTask.id,
+    };
+
+    return this.insertNewTask(taskTitle, options);
+  }
+
+  /**
+   * タスクが登録されたシートを取得する.
+   *
+   * @returns スプレッドシート
+   */
+  protected getTasksSheet (): Sheet {
+    return SpreadsheetApp.getActiveSpreadsheet().getSheetByName(this.options.task.taskSheetName);
   }
 }

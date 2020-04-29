@@ -45,3 +45,9 @@ export interface TaskSettings {
   status: string;
   id: string;
 }
+
+export interface TaskInsertOptions {
+  due?: string;
+  parent?: string;
+  position?: string;
+}
