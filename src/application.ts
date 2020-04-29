@@ -44,7 +44,7 @@ export class Application {
     let columnNumber = 1;
     const eventStatus = sheet.getRange(rowNumber, columnNumber).getValue();
     const eventId = sheet.getRange(rowNumber, ++columnNumber).getValue();
-    const taskStatus = sheet.getRange(rowNumber, columnNumber).getValue();
+    const taskStatus = sheet.getRange(rowNumber, ++columnNumber).getValue();
     const taskId = sheet.getRange(rowNumber, ++columnNumber).getValue();
     const useDefaultTitle = sheet.getRange(rowNumber, ++columnNumber).getValue();
     const customTitle = sheet.getRange(rowNumber, ++columnNumber).getValue();
