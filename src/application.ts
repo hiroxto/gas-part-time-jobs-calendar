@@ -1,5 +1,5 @@
 import { ApplicationOptions, Settings, EventSettings, TaskSettings } from '~/types/application';
-import { Sheet } from '~/types';
+import { Calendar, CalendarEvent, Sheet } from '~/types';
 
 export class Application {
   options: ApplicationOptions;
@@ -119,6 +119,88 @@ export class EventRegister {
    * 登録を開始する
    */
   start (): void{
+    const { sheet, rowNumber, event: eventSettings } = this.settings;
+
+    if (eventSettings.status !== this.options.executeStatusValue) {
+      return;
+    }
+
+    const title = eventSettings.useDefaultTitle ? this.options.event.defaultTitle : eventSettings.customTitle;
+    const location = eventSettings.useDefaultLocation ? this.options.event.defaultLocation : eventSettings.customLocation;
+    const description = [
+      eventSettings.baseDescription,
+      `default_title : ${eventSettings.useDefaultTitle}`,
+      `default_location : ${eventSettings.useDefaultLocation}`,
+    ].join('\n').trim();
+    const options = { description, location };
+
+    const calendarEvent = eventSettings.id === ''
+      ? this.createNewCalendarEvent(title, eventSettings.eventStartDateTime, eventSettings.eventEndDateTime)
+      : this.updateCalendarEvent(eventSettings.id, title, eventSettings.eventStartDateTime, eventSettings.eventEndDateTime);
+
+    calendarEvent
+      .setDescription(options.description)
+      .setLocation(options.location);
+
+    this.addPopupReminders(calendarEvent);
+
+    sheet.getRange(rowNumber, 1).setValue(this.options.addedStatusValue);
+    sheet.getRange(rowNumber, 2).setValue(calendarEvent.getId());
+  }
+
+  /**
+   * カレンダーを取得する
+   *
+   * @returns 登録するカレンダー
+   */
+  protected getCalendar (): Calendar {
+    return CalendarApp.getCalendarById(this.options.event.calendarId);
+  }
+
+  /**
+   * イベントを新規作成する
+   *
+   * @param title イベントのタイトル
+   * @param startDateTime イベントの開始日時
+   * @param endDateTime イベントの終了日時
+   * @returns 作成されたイベント
+   */
+  protected createNewCalendarEvent (title: string, startDateTime: Date, endDateTime: Date): CalendarEvent {
+    return this.getCalendar().createEvent(title, startDateTime, endDateTime);
+  }
+
+  /**
+   * 既存のイベントを更新する
+   *
+   * @param id カレンダーのID
+   * @param title イベントのタイトル
+   * @param startDateTime イベントの開始日時
+   * @param endDateTime イベントの終了日時
+   * @returns 更新されたイベント
+   */
+  protected updateCalendarEvent (id: string, title: string, startDateTime: Date, endDateTime: Date): CalendarEvent {
+    const event = this.getCalendar().getEventById(id);
+
+    return event.setTitle(title).setTime(startDateTime, endDateTime);
+  }
+
+  /**
+   * イベントに通知を設定する
+   * 既存の通知は削除される
+   *
+   * @param event 通知を設定するイベント
+   * @returns 通知を設定したイベント
+   */
+  protected addPopupReminders (event: CalendarEvent): CalendarEvent {
+    const popupAts: number[] = this.options.event.popupMinutes.split(',').map(s => Number(s.trim()));
+
+    event.removeAllReminders();
+
+    popupAts.forEach(popupAt => {
+      event.addPopupReminder(popupAt);
+    });
+
+    return event;
   }
 }
 
