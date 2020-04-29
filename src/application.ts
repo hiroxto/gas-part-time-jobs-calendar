@@ -92,3 +92,45 @@ export class Application {
     return SpreadsheetApp.getActiveSpreadsheet().getSheetByName(this.options.sheetName);
   }
 }
+
+export class EventRegister {
+  options: ApplicationOptions;
+
+  settings: Settings;
+
+  /**
+   * @param options
+   * @param settings
+   */
+  constructor (options: ApplicationOptions, settings: Settings) {
+    this.options = options;
+    this.settings = settings;
+  }
+
+  /**
+   * 登録を開始する
+   */
+  start (): void{
+  }
+}
+
+export class TaskRegister {
+  options: ApplicationOptions;
+
+  settings: Settings;
+
+  /**
+   * @param options
+   * @param settings
+   */
+  constructor (options: ApplicationOptions, settings: Settings) {
+    this.options = options;
+    this.settings = settings;
+  }
+
+  /**
+   * 登録を開始する
+   */
+  start (): void{
+  }
+}
