@@ -1,4 +1,12 @@
-import { ApplicationOptions, Settings, EventSettings, TaskSettings, TaskInsertOptions } from '~/types/application';
+import {
+  ApplicationOptions,
+  Settings,
+  EventSettings,
+  TaskSettings,
+  TaskInsertOptions,
+  EventOptions,
+  TaskOptions,
+} from '~/types/application';
 import { Calendar, CalendarEvent, Sheet, Task } from '~/types';
 
 export class Application {
@@ -319,4 +327,58 @@ export class TaskRegister {
   protected getTasksSheet (): Sheet {
     return SpreadsheetApp.getActiveSpreadsheet().getSheetByName(this.options.task.taskSheetName);
   }
+}
+
+/**
+ * シートに登録されたイベントとタスクを登録する
+ */
+export function start (): void {
+  const scriptProperties = PropertiesService.getScriptProperties();
+
+  // データの入ったシート名
+  const calendarSheetName = scriptProperties.getProperty('CALENDAR_SHEET_NAME');
+  // 実行する status の値
+  const executeStatusValue = scriptProperties.getProperty('EXECUTE_STATUS_VALUE');
+  // 実行完了後にセットする status の値
+  const addedStatusValue = scriptProperties.getProperty('ADDED_STATUS_VALUE');
+
+  // 登録するカレンダーの ID
+  const calendarId = scriptProperties.getProperty('CALENDAR_ID');
+  // 標準のタイトル
+  const defaultTitle = scriptProperties.getProperty('DEFAULT_TITLE');
+  // 標準の場所
+  const defaultLocation = scriptProperties.getProperty('DEFAULT_LOCATION');
+  // 通知する時間
+  const popupMinutes = scriptProperties.getProperty('POPUP_MINUTES');
+
+  // データの入ったシート名
+  const taskSheetName = scriptProperties.getProperty('TASK_SHEET_NAME');
+  // タスクリストの ID
+  const taskListId = scriptProperties.getProperty('TASK_LIST_ID');
+  // ベースのタイトル
+  const parentTaskTitle = scriptProperties.getProperty('PARENT_TASK_TITLE');
+
+  const eventOptions: EventOptions = {
+    calendarId: calendarId,
+    defaultTitle: defaultTitle,
+    defaultLocation: defaultLocation,
+    popupMinutes: popupMinutes,
+  };
+
+  const taskOptions: TaskOptions = {
+    taskSheetName: taskSheetName,
+    taskListId: taskListId,
+    parentTaskTitle: parentTaskTitle,
+  };
+
+  const applicationOptions: ApplicationOptions = {
+    sheetName: calendarSheetName,
+    executeStatusValue: executeStatusValue,
+    addedStatusValue: addedStatusValue,
+    event: eventOptions,
+    task: taskOptions,
+  };
+
+  const application = new Application(applicationOptions);
+  application.start();
 }
