@@ -6,8 +6,11 @@ import {
   TaskInsertOptions,
   EventOptions,
   TaskOptions,
-} from '~/types/application';
-import { Calendar, CalendarEvent, Sheet, Task } from '~/types';
+  Calendar,
+  CalendarEvent,
+  Sheet,
+  Task,
+} from '~/types';
 
 export class Application {
   options: ApplicationOptions;
