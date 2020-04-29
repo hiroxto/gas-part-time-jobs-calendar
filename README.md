@@ -25,7 +25,7 @@ $ cp .clasp.example.json .clasp.json
 |:---:|:---:|:---:|
 |EXECUTE_STATUS_VALUE|登録, 更新を実行する対象の値|`登録/更新する`|
 |ADDED_STATUS_VALUE|実行完了後の値|`登録完了`|
-|CALENDAR_SHEET_NAME|データの入ったシート名|`勤務データ`|
+|BASE_SHEET_NAME|データの入ったシート名|`勤務データ`|
 
 ### イベント登録で使うプロパティの設定
 
