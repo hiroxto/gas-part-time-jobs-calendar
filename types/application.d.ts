@@ -1,5 +1,4 @@
-/* eslint-disable no-undef */
-import Sheet = GoogleAppsScript.Spreadsheet.Sheet;
+import { Sheet } from './gas';
 
 export interface ApplicationOptions {
   sheetName: string;
