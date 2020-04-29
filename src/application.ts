@@ -31,6 +31,10 @@ export class Application {
     for (let rowNumber = 2; rowNumber <= sheet.getLastRow(); rowNumber++) {
       const settings = this.loadSettings(sheet, rowNumber);
 
+      if (settings.event.status === this.options.lastRowStatusValue) {
+        break;
+      }
+
       if (settings.event.status === this.options.executeStatusValue) {
         this.registerEvent(settings);
       }
@@ -349,6 +353,8 @@ export function start (): void {
   const executeStatusValue = scriptProperties.getProperty('EXECUTE_STATUS_VALUE');
   // 実行完了後にセットする status の値
   const addedStatusValue = scriptProperties.getProperty('ADDED_STATUS_VALUE');
+  // 最終行の status の値
+  const lastRowStatusValue = scriptProperties.getProperty('LAST_ROW_STATUS_VALUE');
 
   // 登録するカレンダーの ID
   const calendarId = scriptProperties.getProperty('CALENDAR_ID');
@@ -383,6 +389,7 @@ export function start (): void {
     sheetName: baseSheetName,
     executeStatusValue: executeStatusValue,
     addedStatusValue: addedStatusValue,
+    lastRowStatusValue: lastRowStatusValue,
     event: eventOptions,
     task: taskOptions,
   };
