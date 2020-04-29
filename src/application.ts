@@ -66,6 +66,20 @@ export class Application {
   }
 
   /**
+   * イベントの登録を行う
+   * @param settings
+   */
+  protected registerEvent (settings: Settings): void{
+  }
+
+  /**
+   * タスクの登録を行う
+   * @param settings
+   */
+  protected registerTask (settings: Settings): void{
+  }
+
+  /**
    * スプレッドシートを取得する
    *
    * @returns イベントの設定が入ったシート
