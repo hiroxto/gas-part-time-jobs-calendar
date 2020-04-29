@@ -291,7 +291,7 @@ export class TaskRegister {
       newTask.due = options.due;
     }
 
-    return Tasks.Tasks.insert(newTask, this.options.task.taskListId, options);
+    return Tasks.Tasks.insert(newTask, this.options.task.listId, options);
   }
 
   /**
@@ -375,7 +375,7 @@ export function start (): void {
 
   const taskOptions: TaskOptions = {
     sheetName: taskSheetName,
-    taskListId: taskListId,
+    listId: taskListId,
     parentTaskTitle: parentTaskTitle,
   };
 
