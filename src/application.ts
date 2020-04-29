@@ -333,7 +333,7 @@ export class TaskRegister {
    * @returns スプレッドシート
    */
   protected getTasksSheet (): Sheet {
-    return SpreadsheetApp.getActiveSpreadsheet().getSheetByName(this.options.task.taskSheetName);
+    return SpreadsheetApp.getActiveSpreadsheet().getSheetByName(this.options.task.sheetName);
   }
 }
 
@@ -374,7 +374,7 @@ export function start (): void {
   };
 
   const taskOptions: TaskOptions = {
-    taskSheetName: taskSheetName,
+    sheetName: taskSheetName,
     taskListId: taskListId,
     parentTaskTitle: parentTaskTitle,
   };

@@ -16,7 +16,7 @@ export interface EventOptions {
 }
 
 export interface TaskOptions {
-  taskSheetName: string;
+  sheetName: string;
   taskListId: string;
   parentTaskTitle: string;
 }
