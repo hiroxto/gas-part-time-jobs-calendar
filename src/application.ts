@@ -74,6 +74,9 @@ export class Application {
    * @param settings
    */
   protected registerEvent (settings: Settings): void{
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
+    const register = new EventRegister(this.options, settings);
+    register.start();
   }
 
   /**
@@ -81,6 +84,9 @@ export class Application {
    * @param settings
    */
   protected registerTask (settings: Settings): void{
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
+    const register = new TaskRegister(this.options, settings);
+    register.start();
   }
 
   /**
