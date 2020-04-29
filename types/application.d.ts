@@ -18,3 +18,25 @@ export interface TaskOptions {
   taskListId: string;
   parentTaskTitle: string;
 }
+
+export interface Settings {
+  event: EventSettings;
+  task: TaskSettings;
+}
+
+export interface EventSettings {
+  status: string;
+  id: string;
+  useDefaultTitle: boolean;
+  customTitle: string;
+  eventStartDateTime: Date;
+  eventEndDateTime: Date;
+  useDefaultLocation: boolean;
+  customLocation: string;
+  baseDescription: string;
+}
+
+export interface TaskSettings {
+  status: string;
+  id: string;
+}
