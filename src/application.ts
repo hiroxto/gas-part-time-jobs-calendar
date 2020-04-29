@@ -31,6 +31,10 @@ export class Application {
     for (let rowNumber = 2; rowNumber <= sheet.getLastRow(); rowNumber++) {
       const settings = this.loadSettings(sheet, rowNumber);
 
+      if (settings.event.status === this.options.lastRowStatusValue) {
+        break;
+      }
+
       if (settings.event.status === this.options.executeStatusValue) {
         this.registerEvent(settings);
       }
