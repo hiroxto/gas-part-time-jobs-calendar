@@ -27,8 +27,9 @@ export class Application {
    */
   start (): void {
     const sheet = this.getSheet();
+    const startLine = this.options.startLine;
 
-    for (let rowNumber = 2; rowNumber <= sheet.getLastRow(); rowNumber++) {
+    for (let rowNumber = startLine; rowNumber <= sheet.getLastRow(); rowNumber++) {
       const settings = this.loadSettings(sheet, rowNumber);
 
       if (settings.event.status === this.options.lastRowStatusValue) {
