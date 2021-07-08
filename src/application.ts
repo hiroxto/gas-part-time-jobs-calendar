@@ -95,7 +95,7 @@ export class Application {
    * イベントの登録を行う
    * @param settings
    */
-  protected registerEvent (settings: Settings): void{
+  protected registerEvent (settings: Settings): void {
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
     const register = new EventRegister(this.options, settings);
     register.start();
@@ -105,7 +105,7 @@ export class Application {
    * タスクの登録を行う
    * @param settings
    */
-  protected registerTask (settings: Settings): void{
+  protected registerTask (settings: Settings): void {
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
     const register = new TaskRegister(this.options, settings);
     register.start();
@@ -138,7 +138,7 @@ export class EventRegister {
   /**
    * 登録を開始する
    */
-  start (): void{
+  start (): void {
     const { sheet, rowNumber, event: eventSettings } = this.settings;
 
     if (eventSettings.status !== this.options.executeStatusValue) {
@@ -241,7 +241,7 @@ export class TaskRegister {
   /**
    * 登録を開始する
    */
-  start (): void{
+  start (): void {
     const { sheet, rowNumber, task } = this.settings;
 
     if (task.status !== this.options.executeStatusValue) {
