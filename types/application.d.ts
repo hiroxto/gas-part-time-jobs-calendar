@@ -5,6 +5,7 @@ export interface ApplicationOptions {
   executeStatusValue: string;
   addedStatusValue: string;
   lastRowStatusValue: string;
+  startLine: number;
   event: EventOptions;
   task: TaskOptions;
 }

@@ -349,6 +349,8 @@ export function start (): void {
 
   // データの入ったシート名
   const baseSheetName = scriptProperties.getProperty('BASE_SHEET_NAME');
+  // 最終行の status の値
+  const startLine = +scriptProperties.getProperty('START_LINE');
   // 実行する status の値
   const executeStatusValue = scriptProperties.getProperty('EXECUTE_STATUS_VALUE');
   // 実行完了後にセットする status の値
@@ -387,6 +389,7 @@ export function start (): void {
 
   const applicationOptions: ApplicationOptions = {
     sheetName: baseSheetName,
+    startLine: startLine,
     executeStatusValue: executeStatusValue,
     addedStatusValue: addedStatusValue,
     lastRowStatusValue: lastRowStatusValue,
