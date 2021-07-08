@@ -27,8 +27,9 @@ export class Application {
    */
   start (): void {
     const sheet = this.getSheet();
+    const startLine = this.options.startLine;
 
-    for (let rowNumber = 2; rowNumber <= sheet.getLastRow(); rowNumber++) {
+    for (let rowNumber = startLine; rowNumber <= sheet.getLastRow(); rowNumber++) {
       const settings = this.loadSettings(sheet, rowNumber);
 
       if (settings.event.status === this.options.lastRowStatusValue) {
@@ -349,6 +350,8 @@ export function start (): void {
 
   // データの入ったシート名
   const baseSheetName = scriptProperties.getProperty('BASE_SHEET_NAME');
+  // 最終行の status の値
+  const startLine = +scriptProperties.getProperty('START_LINE');
   // 実行する status の値
   const executeStatusValue = scriptProperties.getProperty('EXECUTE_STATUS_VALUE');
   // 実行完了後にセットする status の値
@@ -387,6 +390,7 @@ export function start (): void {
 
   const applicationOptions: ApplicationOptions = {
     sheetName: baseSheetName,
+    startLine: startLine,
     executeStatusValue: executeStatusValue,
     addedStatusValue: addedStatusValue,
     lastRowStatusValue: lastRowStatusValue,

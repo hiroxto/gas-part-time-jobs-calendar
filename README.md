@@ -27,6 +27,7 @@ $ cp .clasp.example.json .clasp.json
 |ADDED_STATUS_VALUE|実行完了後の値|`登録完了`|
 |LAST_ROW_STATUS_VALUE|最終行の値. イベントにこれがセットされていると, その行で終了する.|`最終行`|
 |BASE_SHEET_NAME|データの入ったシート名|`勤務データ`|
+|START_LINE|開始する行．2以上の値．|`2`|
 
 ### イベント登録で使うプロパティの設定
 
