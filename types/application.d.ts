@@ -1,15 +1,5 @@
 import { Sheet } from './gas';
 
-export interface ApplicationOptions {
-  sheetName: string;
-  executeStatusValue: string;
-  addedStatusValue: string;
-  lastRowStatusValue: string;
-  startLine: number;
-  event: EventOptions;
-  task: TaskOptions;
-}
-
 export interface EventOptions {
   calendarId: string;
   defaultTitle: string;
@@ -23,11 +13,14 @@ export interface TaskOptions {
   parentTaskTitle: string;
 }
 
-export interface Settings {
-  sheet: Sheet;
-  rowNumber: number;
-  event: EventSettings;
-  task: TaskSettings;
+export interface ApplicationOptions {
+  sheetName: string;
+  executeStatusValue: string;
+  addedStatusValue: string;
+  lastRowStatusValue: string;
+  startLine: number;
+  event: EventOptions;
+  task: TaskOptions;
 }
 
 export interface EventSettings {
@@ -45,6 +38,13 @@ export interface EventSettings {
 export interface TaskSettings {
   status: string;
   id: string;
+}
+
+export interface Settings {
+  sheet: Sheet;
+  rowNumber: number;
+  event: EventSettings;
+  task: TaskSettings;
 }
 
 export interface TaskInsertOptions {
