@@ -12,12 +12,12 @@
   "devDependencies": {
     "@google/clasp": "2.4.1",
     "@types/google-apps-script": "1.0.37",
-    "@typescript-eslint/eslint-plugin": "4.28.2",
-    "@typescript-eslint/parser": "4.28.2",
-    "eslint": "7.30.0",
+    "@typescript-eslint/eslint-plugin": "4.31.1",
+    "@typescript-eslint/parser": "4.31.1",
+    "eslint": "7.32.0",
     "eslint-config-standard": "16.0.3",
     "eslint-plugin-googleappsscript": "1.0.4",
-    "eslint-plugin-import": "2.23.4",
+    "eslint-plugin-import": "2.24.2",
     "eslint-plugin-node": "11.1.0",
     "eslint-plugin-promise": "5.1.0",
     "eslint-plugin-standard": "4.1.0"
